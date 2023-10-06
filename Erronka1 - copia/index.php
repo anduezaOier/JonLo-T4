@@ -31,8 +31,6 @@ try {
 $titulo = isset($_POST['apellido']) ? 'Lista de alumnos (' . $_POST['apellido'] . ')' : 'Lista de alumnos';
 ?>
 
-<?php include "templates/header.php"; ?>
-
 <?php
 if ($error) {
   ?>
@@ -106,4 +104,3 @@ if ($error) {
   </div>
 </div>
 
-<?php include "templates/footer.php"; ?>

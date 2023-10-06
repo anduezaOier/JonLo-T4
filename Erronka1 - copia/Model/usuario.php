@@ -1,5 +1,5 @@
 <?php
-    use ../ModelBase;
+    use ModelBase;
     class Usuario extends ModelBase{
         private $nombreUsuario, $password, $tipo, $asignatura;
         private $model_base;
