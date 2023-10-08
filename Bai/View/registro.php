@@ -1,6 +1,7 @@
 <html>
 <head>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="../Css/style.css">
   <script>
       function check() {
         var password1 = document.getElementById('password1').value;
@@ -31,16 +32,42 @@ if (isset($_POST['submit'])) {
   $config = include '../config.php';
 
   $usuario = array(
+    "dni"   => $_POST['dni'],
     "nombreUsuario"   => $_POST['nombreUsuario'],
     "contrasena" => $_POST['contrasena'],
-    "tipo"    => "alumno",
+    "tipo"    => "Alumno",
   );
 
   $usuarioController->save($usuario);
 
 }
 ?>
+<nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <!-- Left-side Links -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="verAlumnos.php">Alumnos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="verUsuarios.php">Usuario</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="verCursos.php">Cursos</a>
+                </li>
+            </ul>
 
+            <!-- Right-side Links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="registro.php">Registro</a>
+                </li>
+            </ul>
+        </div>
+</nav>
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -48,24 +75,24 @@ if (isset($_POST['submit'])) {
       <hr>
       <form method="post">
         <div class="form-group">
-          <label for="nombre">Nombre</label>
-          <input type="text" name="nombre" id="nombre" class="form-control">
+          <label for="dni">DNI:</label>
+          <input type="text" name="dni" id="dni" class="form-control">
         </div>
         <div class="form-group">
-          <label for="nombre">Nombre de usuario</label>
+          <label for="nombre">Nombre de usuario:</label>
           <input type="text" name="nombreUsuario" id="nombreUsuario" class="form-control">
         </div>
         <div class="form-group">
-          <label for="password1">Contraseña</label>
+          <label for="password1">Contraseña:</label>
           <input type="password" name="contrasena" id="password1" class="form-control" require>
         </div>
         <div class="form-group">
-          <label for="password2">Repite Contraseña</label>
+          <label for="password2">Repite Contraseña:</label>
           <input type="password" name="contrasena2" id="password2" class="form-control" require>
         </div>
         <div class="button-container">
         <div class="form-group">
-          <input type="submit" name="submit" class="btn btn-primary">
+          <input type="submit" name="submit" class="btn btn-primary" onclick="check()">
           <a class="btn btn-primary" href="index.php">Regresar al inicio</a>
         </div>
       </div>

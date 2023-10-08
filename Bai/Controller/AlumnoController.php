@@ -10,14 +10,6 @@ class AlumnoController{
     //     $dato=$alumnoa->selectAlumnos("alumnos");
     //     require_once("View/verAlumnos.php");
     // }
-    function mostrar(){
-        //Le pide al modelo todos los libros
-        $alumno = new Alumno();
-        $alumnos = $alumno->getAlumnos();
-        //Pasa a la vista toda la información que se desea representar
-        //return $alumno;
-        include '../View/verAlumnos.php';
-    }
     function new(){
         require_once("../View/crearAlumno.php");        
     }
@@ -37,18 +29,10 @@ class AlumnoController{
     //     $dato = $alumno->selectAlumnos("alumnos","id=".$id);
     //     require_once("../View/editarAlumno.php");
     // }
-    //  function update(){
-    //      $id = $_REQUEST['id'];
-    //      $nombre = $_REQUEST['nombre'];
-    //      $apellido = $_REQUEST['apellido'];
-    //      $email = $_REQUEST['email'];
-    //      $edad = $_REQUEST['edad'];
-    //      $data = "'".$nombre."','".$apellido."','".$email."','".$edad."'";
-    //      $clause = "id=".$id;
-    //      $alumno = new Alumno();
-    //      $dato = $alumno->editarAlumno("alumnos", $data,$clause);
-    //      header();
-    //  }
+      function update($data, $id){
+          $alumno = new Alumno();
+          $alumno->editarAlumno($data, $id);
+      }
      function delete($id){
          $alumno = new Alumno();
          $alumno->borrarAlumno($id);

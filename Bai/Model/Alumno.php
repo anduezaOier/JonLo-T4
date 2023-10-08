@@ -18,55 +18,18 @@
             $this->alumno = array();
             //$this->db= new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
         }
-        public function selectAlumnos($table){
-            // $consulta="SELECT * from ". $table;
-            // $resultado=$this->db->query($consulta);
-            // while($filas = $resultado->fetchAll(PDO::FETCH_ASSOC)){
-            //     $this->alumno[]=$filas;
-            // }
-            // return $this->alumno;
-            // try{
 
-            //     $conditions = $min_query !== null ? "WHERE nombre LIKE :min_query" : "";
-            //     $query_params = [ ':min_query' => "%$min_query%" ];
-
-            //     return $this->model_base->index('product', $conditions, $query_params);
-            // } catch (\PDOException $e) {
-            //     echo $e->getMessage();
-		    // }
-        }
-        public function getAlumnos(){
-            $db= getConnection();
-            $result = $db->query('SELECT * FROM alumnos');
-            $result->execute();
-            return $result->fetchAll(PDO::FETCH_ASSOC);
-            //$alumnos = array();
-            // while ( $alumno = $result->fetch() )
-            //     $alumnos[] = $alumno;
-            // $sentencia = $db->prepare($result);
-            // $sentencia->execute();         
-            // $alumnos = $sentencia->fetchAll();      
-            // return $alumnos;
-        }
-        public function getAlumno($id){
-            $db = getConnection();
-            $query = 'SELECT * FROM libros WHERE id = '.$id;
-            $stmt = $db->prepare($query);
-            $stmt->execute(array($id));
-            $alumno = $stmt->fetch();
-            return $alumno;
-        }
-        
         public function crearAlumno($data){
             $db = getConnection();
             //$consulta="INSERT INTO alumnos VALUES (". $data .")";
             // $consulta ="INSERT INTO alumnos (nombre, apellido, email, edad)";
             // $consulta = "VALUES (:". implode(", :", array_keys($data)) .")";
-            $consulta = "INSERT INTO alumnos (nombre, apellido, email, edad) VALUES (:nombre, :apellido, :email, :edad)";
+            $consulta = "INSERT INTO alumnos (dni, nombre, apellido, email, edad) VALUES (:dni, :nombre, :apellido, :email, :edad)";
             // Prepare the SQL statement
             $sentencia = $db->prepare($consulta);
 
             // Bind the values from the $data array to the placeholders
+            $sentencia->bindParam(':dni', $data['dni']);
             $sentencia->bindParam(':nombre', $data['nombre']);
             $sentencia->bindParam(':apellido', $data['apellido']);
             $sentencia->bindParam(':email', $data['email']);
@@ -91,14 +54,19 @@
             //     echo $e->getMessage();
 		    // }
         }
-        public function editarAlumno($table, $data, $condition){
-            $consulta="UPDATE ". $table ." SET ". $data ." WHERE " . $condition;
-            $resultado=$this->db->query($consulta);
-            if($resultado){
-                return true;
-            }else{
-                return false;
-            }
+        public function editarAlumno($data, $id){
+            $db = getConnection();
+            $consulta="UPDATE alumnos SET dni = (:dni), nombre = (:nombre), apellido = (:apellido), email = (:email), edad = (:edad) WHERE id = " . $id;   
+            $sentencia = $db->prepare($consulta);
+            // Bind the values from the $data array to the placeholders
+            $sentencia->bindParam(':dni', $data['dni']);
+            $sentencia->bindParam(':nombre', $data['nombre']);
+            $sentencia->bindParam(':apellido', $data['apellido']);
+            $sentencia->bindParam(':email', $data['email']);
+            $sentencia->bindParam(':edad', $data['edad']);
+            $sentencia = $db->prepare($consulta);
+            $sentencia->execute($data);
+
             // try{
             //     $this->model_base->update('alumnos', $data, $id);
             // } catch (\PDOException $e) {
@@ -106,37 +74,5 @@
 		    // }
         }
     }
-        // public function getNombre()
-        // {
-        //     return $this->nombre;
-        // }
-        // public function setNombre($nombreUsuario)
-        // {
-        //     $this->nombreUsuario = $nombreUsuario;
-        // }
-        // public function getApellido()
-        // {
-        //     return $this->apellido;
-        // }
-        // public function setApellido($apellido)
-        // {
-        //     $this->apellido = $apellido;
-        // }
-        // public function getEmail()
-        // {
-        //     return $this->email;
-        // }
-        // public function setEmail($email)
-        // {
-        //     $this->email = $email;
-        // }
-        // public function getEdad()
-        // {
-        //     return $this->edad;
-        // }
-        // public function setEdad($edad)
-        // {
-        //     $this->edad = $edad;
-        // }
-
+        
 ?>

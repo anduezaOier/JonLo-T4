@@ -1,7 +1,8 @@
 <html>
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-</head>
+    <link rel="stylesheet" type="text/css" href="../Css/style.css">
+  </head>
 <?php
 include '../funciones.php';
 
@@ -18,15 +19,15 @@ try {
   $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
 
   if (isset($_POST['nombre'])) {
-    $consultaSQL = "SELECT * FROM asignaturas WHERE nombre LIKE '%" . $_POST['nombre'] . "%'";
+    $consultaSQL = "SELECT * FROM cursos WHERE nombre LIKE '%" . $_POST['nombre'] . "%'";
   } else {
-    $consultaSQL = "SELECT * FROM asignaturas";
+    $consultaSQL = "SELECT * FROM cursos";
   }
 
   $sentencia = $conexion->prepare($consultaSQL);
   $sentencia->execute();
 
-  $asignaturas = $sentencia->fetchAll();
+  $cursos = $sentencia->fetchAll();
 
 } catch(PDOException $error) {
   $error= $error->getMessage();
@@ -36,7 +37,38 @@ $titulo = isset($_POST['nombre']) ? 'Lista de cursos (' . $_POST['nombre'] . ')'
 ?>
 
 
+<nav class="navbar navbar-expand-lg ">
+        <div class="container">
+            <!-- Left-side Links -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="verAlumnos.php">Alumnos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="verUsuarios.php">Usuario</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="verCursos.php">Cursos</a>
+                </li>
+            </ul>
 
+            <!-- Right-side Links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
+                <li>
+                  <a href=""><?php echo $_SESSION['username']; ?></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Log Out</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="registro.php">Registro</a>
+                </li>
+            </ul>
+        </div>
+</nav>
 <?php
 if ($error) {
   ?>
@@ -76,22 +108,22 @@ if ($error) {
           <tr>
             <th>Nombre</th>
             <th>Descripción</th>
-            <th>Modelo</th>
+            <th>Idioma</th>
+            <th>Código</th>
           </tr>
         </thead>
         <tbody>
           <?php
-          if ($asignaturas && $sentencia->rowCount() > 0) {
-            foreach ($asignaturas as $fila) {
+            foreach ($cursos as $curso) {
               ?>
               <tr>
-                <td><?php echo escapar($fila["nombre"]); ?></td>
-                <td><?php echo escapar($fila["descripcion"]); ?></td>
-                <td><?php echo escapar($fila["idioma"]); ?></td>
+                <td><?php echo escapar($curso["nombre"]); ?></td>
+                <td><?php echo escapar($curso["descripcion"]); ?></td>
+                <td><?php echo escapar($curso["idioma"]); ?></td>
+                <td><?php echo escapar($curso["codigo"]); ?></td>
               </tr>
               <?php
-            }
-          }
+            }        
           ?>
         <tbody>
       </table>

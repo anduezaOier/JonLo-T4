@@ -26,6 +26,14 @@
             $usu->crearUsuario($data);
             //header("location: crearAlumno.php");
          }
+        function update($data, $id){
+            $usuario = new Usuario();
+            $usuario->editarUsuario($data, $id);
+        }
+       function delete($id){
+           $usuario = new Usuario();
+           $usuario->borrarUsuario($id);
+       }
         
     }
 ?>

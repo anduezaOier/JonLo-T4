@@ -38,11 +38,12 @@
             //$consulta="INSERT INTO alumnos VALUES (". $data .")";
             // $consulta ="INSERT INTO alumnos (nombre, apellido, email, edad)";
             // $consulta = "VALUES (:". implode(", :", array_keys($data)) .")";
-            $consulta = "INSERT INTO usuarios (nombreUsuario, contrasena, tipo) VALUES (:nombreUsuario, :contrasena, :tipo)";
+            $consulta = "INSERT INTO usuarios (dni, nombreUsuario, contrasena, tipo) VALUES (:dni, :nombreUsuario, :contrasena, :tipo)";
             // Prepare the SQL statement
             $sentencia = $db->prepare($consulta);
 
             // Bind the values from the $data array to the placeholders
+            $sentencia->bindParam(':dni', $data['dni']);
             $sentencia->bindParam(':nombreUsuario', $data['nombreUsuario']);
             $sentencia->bindParam(':contrasena', $data['contrasena']);
             $sentencia->bindParam(':tipo', $data['tipo']);
