@@ -30,10 +30,14 @@
             $usuario = new Usuario();
             $usuario->editarUsuario($data, $id);
         }
-       function delete($id){
+        function updateCurso($data, $id){
+            $usuario = new Usuario();
+            $usuario->usuarioCurso($data, $id);
+        }
+        function delete($id){
            $usuario = new Usuario();
            $usuario->borrarUsuario($id);
-       }
+        }
         
     }
 ?>

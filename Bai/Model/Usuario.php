@@ -69,6 +69,16 @@
         //         echo $e->getMessage();
 		//     }
         }
+        public function usuarioCurso($data, $id){
+            $db = getConnection();
+            $consulta="UPDATE usuarios SET curso = ".$data." WHERE id = (:id)";   
+            $sentencia = $db->prepare($consulta);
+            // Bind the values from the $data array to the placeholders
+            //$sentencia->bindParam(':curso', $id['curso']);
+            //$sentencia->bindParam(':curso', $data['curso']);
+            $sentencia->bindParam(':id', $id['laid']);
+            $sentencia->execute();
+        }
         
 
     }

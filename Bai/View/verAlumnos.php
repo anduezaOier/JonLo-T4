@@ -1,6 +1,7 @@
 <html>
 <?php
   session_start(); // Ensure session is started
+  $loggedIn = isset($_SESSION['user_id']);
 ?>
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -35,7 +36,7 @@ require_once "../Controller/AlumnoController.php";
 
     $alumnos = $sentencia->fetchAll();
 
-    if ($_GET['action'] === 'delete' && isset($_GET['id'])) {
+    if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
       $alumno = $_GET['id'];
       $alumnoController->delete($alumno);
     } else {
@@ -52,6 +53,7 @@ require_once "../Controller/AlumnoController.php";
 <nav class="navbar navbar-expand-lg">
         <div class="container">
             <!-- Left-side Links -->
+            <?php if ($loggedIn): ?>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="verAlumnos.php">Alumnos</a>
@@ -67,12 +69,23 @@ require_once "../Controller/AlumnoController.php";
             <!-- Right-side Links -->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
+                    <a class="nav-link" href="registro.php">Registro</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Log Out</a>
+                </li>
+            </ul>
+            <?php else: ?>
+            <!-- Right-side Links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
                     <a class="nav-link" href="login.php">Login</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="registro.php">Registro</a>
                 </li>
             </ul>
+            <?php endif; ?>
         </div>
 </nav>
 <div class="container">

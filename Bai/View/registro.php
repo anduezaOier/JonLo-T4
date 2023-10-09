@@ -1,4 +1,8 @@
 <html>
+<?php
+  session_start(); // Ensure session is started
+  $loggedIn = isset($_SESSION['user_id']);
+?>
 <head>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="../Css/style.css">
@@ -24,27 +28,32 @@ $filtercolumn = "";
 $filtervalue = "";
 
 if (isset($_POST['submit'])) {
-  $resultado = [
-    'error' => false,
-    'mensaje' => 'El usuario ' . escapar($_POST['nombreUsuario']) . ' ha sido agregado con éxito'
-  ];
-
   $config = include '../config.php';
+  if($_POST['contrasena'] == $_POST['contrasena2']){
+    $resultado = [
+      'error' => false,
+      'mensaje' => 'El usuario ' . escapar($_POST['nombreUsuario']) . ' ha sido agregado con éxito'
+    ];
+    $usuario = array(
+      "dni"   => $_POST['dni'],
+      "nombreUsuario"   => $_POST['nombreUsuario'],
+      "contrasena" => $_POST['contrasena'],
+      "tipo"    => "Alumno",
+    );
+    $usuarioController->save($usuario);
+  }else{
+    $resultado = [
+      'error' => false,
+      'mensaje' => 'La contraseña tiene que ser igual'
+    ];
+  }
 
-  $usuario = array(
-    "dni"   => $_POST['dni'],
-    "nombreUsuario"   => $_POST['nombreUsuario'],
-    "contrasena" => $_POST['contrasena'],
-    "tipo"    => "Alumno",
-  );
-
-  $usuarioController->save($usuario);
-
+  
 }
 ?>
 <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <!-- Left-side Links -->
+            <?php if ($loggedIn): ?>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="verAlumnos.php">Alumnos</a>
@@ -66,6 +75,17 @@ if (isset($_POST['submit'])) {
                     <a class="nav-link" href="registro.php">Registro</a>
                 </li>
             </ul>
+            <?php else: ?>
+            <!-- Right-side Links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="registro.php">Registro</a>
+                </li>
+            </ul>
+            <?php endif; ?>
         </div>
 </nav>
 <div class="container">

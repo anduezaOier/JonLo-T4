@@ -1,10 +1,15 @@
 <html>
+<?php
+  session_start(); // Ensure session is started
+  $loggedIn = isset($_SESSION['user_id']);
+?>
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../Css/style.css">
   </head>
 <?php
 include '../funciones.php';
+require_once "../Controller/UsuarioController.php";
 
 csrf();
 if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
@@ -24,10 +29,25 @@ try {
     $consultaSQL = "SELECT * FROM cursos";
   }
 
+  $usuarioController = new usuarioController();
   $sentencia = $conexion->prepare($consultaSQL);
   $sentencia->execute();
 
   $cursos = $sentencia->fetchAll();
+
+  if (isset($_GET['action']) && $_GET['action'] === 'matriculatu' && isset($_GET['id'])) {
+    //$user = $_SESSION['user_id'];
+    $user = array(
+      "laid" => $_SESSION['user_id'],
+    );
+    // $user = array(
+    //   "curso" => $_SESSION['user_id'],
+    // );
+    $cursoId = $_GET['id'];
+    $usuarioController->updateCurso($cursoId, $user);
+  } else {
+    
+  }
 
 } catch(PDOException $error) {
   $error= $error->getMessage();
@@ -36,10 +56,10 @@ try {
 $titulo = isset($_POST['nombre']) ? 'Lista de cursos (' . $_POST['nombre'] . ')' : 'Lista de cursos';
 ?>
 
-
 <nav class="navbar navbar-expand-lg ">
         <div class="container">
             <!-- Left-side Links -->
+            <?php if ($loggedIn): ?>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="verAlumnos.php">Alumnos</a>
@@ -55,18 +75,26 @@ $titulo = isset($_POST['nombre']) ? 'Lista de cursos (' . $_POST['nombre'] . ')'
             <!-- Right-side Links -->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="login.php">Login</a>
-                </li>
-                <li>
-                  <a href=""><?php echo $_SESSION['username']; ?></a>
+                    <a class="nav-link" href="registro.php">Registro</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="logout.php">Log Out</a>
                 </li>
+            </ul>
+            <?php else: ?>
+            <!-- Right-side Links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="registro.php">Registro</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Log Out</a>
+                </li>
             </ul>
+            <?php endif; ?>        
         </div>
 </nav>
 <?php
@@ -121,8 +149,9 @@ if ($error) {
                 <td><?php echo escapar($curso["descripcion"]); ?></td>
                 <td><?php echo escapar($curso["idioma"]); ?></td>
                 <td><?php echo escapar($curso["codigo"]); ?></td>
+                <td><a href="<?= 'verCursos.php?action=matriculatu&id=' . escapar($curso["id"]) ?>" class="btn btn-primary">Matricularse</a></td>
               </tr>
-              <?php
+              <?php   
             }        
           ?>
         <tbody>

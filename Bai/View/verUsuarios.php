@@ -1,4 +1,9 @@
 <html>
+<?php
+  session_start(); // Ensure session is started
+  $loggedIn = isset($_SESSION['user_id']);
+  $type = ($_SESSION['user_type']);
+?>
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../Css/style.css">
@@ -25,13 +30,17 @@ require_once "../Controller/UsuarioController.php";
     } else {
       $consultaSQL = "SELECT * FROM usuarios";
     }
+    $consultaSQL2 = "SELECT * FROM cursos";
 
     $sentencia = $conexion->prepare($consultaSQL);
     $sentencia->execute();
+    $sentencia2 = $conexion->prepare($consultaSQL2);
+    $sentencia2->execute();
 
     $usuarios = $sentencia->fetchAll();
+    $cursos = $sentencia2->fetchAll();
 
-    if ($_GET['action'] === 'delete' && isset($_GET['id'])) {
+    if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
       $usuario = $_GET['id'];
       $usuarioController->delete($usuario);
     } else {
@@ -48,27 +57,53 @@ require_once "../Controller/UsuarioController.php";
 <nav class="navbar navbar-expand-lg">
   <div class="container">
       <!-- Left-side Links -->
-      <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-              <a class="nav-link" href="verAlumnos.php">Alumnos</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="verUsuarios.php">Usuario</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="verCursos.php">Cursos</a>
-          </li>
-      </ul>
-
-      <!-- Right-side Links -->
-      <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-              <a class="nav-link" href="login.php">Login</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="registro.php">Registro</a>
-          </li>
-      </ul>
+      <?php if ($loggedIn && $type === 'Admin') : ?>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="verAlumnos.php">Alumnos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="verUsuarios.php">Usuario</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="verCursos.php">Cursos</a>
+                </li>
+            </ul>
+            <!-- Right-side Links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="registro.php">Registro</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Log Out</a>
+                </li>
+            </ul>
+      <?php elseif ($loggedIn && $type === 'Alumno') : ?>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="verCursos.php">Cursos</a>
+                </li>
+            </ul>
+            <!-- Right-side Links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="registro.php">Registro</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Log Out</a>
+                </li>
+            </ul>
+      <?php else: ?>
+            <!-- Right-side Links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="registro.php">Registro</a>
+                </li>
+            </ul>
+      <?php endif; ?>
   </div>
 </nav>
 <div class="container">
@@ -105,12 +140,19 @@ require_once "../Controller/UsuarioController.php";
             <tr>
               <td><?php echo escapar($usuario['id']) ?></td>
               <td><?php echo escapar($usuario['nombreUsuario']) ?></td>
-              <td><?php echo escapar($usuario['curso'])?></td>
+              <?php foreach($cursos as $curso):?>
+                <td><?php if ($curso['id'] == $usuario['curso']) { 
+                    echo escapar($curso['nombre']);
+                    break;                 
+                  }
+                  ?>
+                </td>
+              <?php endforeach;?>          
               <td>
                 <a href="verUsuarios.php?action=delete&id=<?= escapar($usuario["id"]) ?>">🗑️Borrar</a>              
               </td>
             </tr>
-              <?php endforeach; ?>
+            <?php endforeach; ?>
           </tbody>
       </table>
     </div>
