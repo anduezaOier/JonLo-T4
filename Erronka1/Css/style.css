@@ -1,0 +1,49 @@
+h2{
+    font-style: italic;
+}
+
+.navbar {
+    background-color: #001f3f; /* Dark Blue background color */
+}
+
+.navbar-nav .nav-link {
+color: #fff; /* White font color */
+font-weight: normal; /* Normal font weight */
+}
+
+.navbar-nav .nav-link:hover {
+color: #ff0; /* Yellow font color on hover */
+font-weight: bold; /* Bold font weight on hover */
+}
+
+.navbar-nav .nav-item.active .nav-link {
+color: #f00; /* Red font color for the active link */
+font-weight: bold; /* Bold font weight for the active link */
+}
+
+.btn{
+    background-color: #001f3f;
+    color: #fffdb8;
+}
+
+a{
+    color:darkblue;
+}
+
+a:hover{
+    color:aqua;
+    text-decoration: none;
+}
+
+a:active{
+    color:blueviolet;
+    text-decoration: none;
+}
+
+th{
+    font-style: italic;
+}
+
+p{
+    color: white;
+}
